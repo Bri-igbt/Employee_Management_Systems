@@ -21,7 +21,7 @@
 
     /* Button styles */
     .btn-primary {
-        @apply bg-linear-to-r from-indigo-600 to-indigo-500 text-white px-5 py-2.5 rounded-md text-sm hover:from-indigo-700 hover:to-indigo-600 transition-all duration-200 shadow-md shadow-indigo-500/25 active:scale-[0.98];
+        @apply bg-gradient-to-r from-orange-600 to-orange-500 text-white px-5 py-2.5 rounded-md text-sm hover:from-orange-700 hover:to-orange-600 transition-all duration-200 shadow-md shadow-orange-500/25 active:scale-[0.98];
     }
 
     .btn-secondary {
