@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DEPARTMENTS } from '../assets/assets.jsx';
+import { Loader2Icon } from 'lucide-react';
 
 const EmployeeForm = ({initialData, onSuccess, onCancel}) => {
     const navigate = useNavigate()
@@ -118,12 +119,91 @@ const EmployeeForm = ({initialData, onSuccess, onCancel}) => {
                             step={0.01}
                         />
                     </div>
+                    <div>
+                        <label className='block mb-2'>Deductions</label>
+                        <input
+                            type='number'
+                            name="deductions"
+                            required
+                            defaultValue={initialData?.deductions || 0}
+                            min={0}
+                            step={0.01}
+                        />
+                    </div>
+                    {isEditMode && (
+                        <div>
+                            <label className='block mb-2'>Status</label>
+                            <select
+                                name="employmentStatus"
+                                required
+                                defaultValue={initialData?.employmentStatus || 0}
+                            >
+                                <option value="ACTIVE">Active</option>
+                                <option value="INACTIVE">Inactive</option>
+                            </select>
+                        </div>
+                    )}
                 </div>
             </div>
 
             {/* Account Setups */}
+            <div className="card p-5 sm:p-6">
+                <h3 className='text-base font-medium text-slate-900 mb-6 pb-4 border-b border-slate-100'>
+                    Account Setup
+                </h3>
+
+                <div className='grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm text-slate-700'>
+                    <div className='sm:col-span-2'>
+                        <label className='block mb-2'>Work Email</label>
+                        <input
+                            type='email'
+                            name="email"
+                            required
+                            defaultValue={initialData?.email}
+                        />
+                    </div>
+                    
+                    {!isEditMode && (
+                        <div>
+                            <label className='block mb-2'>Temporary Password</label>
+                            <input
+                                type='password'
+                                name="password"
+                                required
+                            />
+                        </div>
+                    )}
+                    {isEditMode && (
+                        <div>
+                            <label className='block mb-2'>Change Password (Optional)</label>
+                            <input
+                                type='password'
+                                name="password"
+                                placeholder='Leave black to keep current'
+                            />
+                        </div>
+                    )}
+
+                    <div>
+                        <label className='block mb-2'>System Role</label>
+                        <select name='role' defaultValue={initialData?.user?.role || "EMPLOYEE"}>
+                            <option value="EMPLOYEE">Employee</option>
+                            <option value="ADMIN">Admin</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
             {/* Buttons */}
+            <div className='flex flex-col-reverse sm:flex-row justify-end gap-3 pt-2'>
+                <button type='button' className='btn-secondary' onClick={()=> (onCancel ? onCancel() : navigate(-1))}>
+                    Cancel
+                </button>
+                <button disabled={loading} type='submit' className='btn-primary flex items-center justify-center'>
+                    {loading && <Loader2Icon />}
+                    {isEditMode ? 'Update Employee' : "Create Employee"}
+                </button>
+            </div>
         </form>
     )
 }
