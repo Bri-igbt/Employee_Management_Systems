@@ -111,7 +111,7 @@ const Employees = () => {
       {/* Edit Employee Modal */}
       {editEmployee && (
         <div onClick={()=> setEditEmployee(null)} className="fixed bg-black/40 backdrop-blur-sm inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto">
-          <div className='relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-8 animate-fade-in'>
+          <div onClick={(e) => e.stopPropagation()} className='relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-8 animate-fade-in'>
             <div className='flex items-center justify-between p-6 pb-0'>
                 <div>
                   <h2 className='text-lg font-semibold text-slate-900'>Edit Employee</h2>
