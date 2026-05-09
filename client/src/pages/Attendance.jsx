@@ -3,6 +3,8 @@ import { useState } from "react"
 import { dummyAttendanceData } from "../assets/assets.jsx";
 import Loading from "../components/Loading.jsx";
 import CheckInButton from "../components/attendance/CheckInButton.jsx";
+import AttendanceStats from "../components/attendance/AttendanceStats.jsx";
+import AttendanceHistory from "../components/attendance/AttendanceHistory.jsx";
 
 const Attendance = () => {
   const [history, setHistory] = useState([]);
@@ -49,6 +51,14 @@ const Attendance = () => {
           />
         </div>
       )}
+
+      <AttendanceStats
+        history={history} 
+      />
+
+      <AttendanceHistory 
+        history={history} 
+      />
 
     </div>
   )
