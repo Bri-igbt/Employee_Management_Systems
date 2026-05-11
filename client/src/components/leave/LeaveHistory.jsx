@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+import { Check, Loader2, X } from 'lucide-react';
 import React, { useState } from 'react'
 
 const LeaveHistory = ({ leaves, isAdmin, onUpdate}) => {
@@ -42,26 +44,53 @@ const LeaveHistory = ({ leaves, isAdmin, onUpdate}) => {
                                 )}
             
                                 <td className='px-6 py-4 text-slate-600'>
-                                {record.checkIn ? format(new Date(record.checkIn), "hh:mm a") : "-"}
+                                    <span className='badge bg-slate-100 text-slate-600'>{leave.type}</span>
                                 </td>
             
-                                <td className='px-6 py-4 text-slate-600'>
-                                {record.checkOut ? format(new Date(record.checkOut), "hh:mm a") : "-"}
+                                <td className='text-xs text-slate-500'>
+                                    {format(new Date(leave.startDate), "MMM dd")} - { format(new Date(leave.endDate), "MMM dd, yyyy")}
                                 </td>
             
-                                <td className='px-6 py-4 text-slate-600 font-medium'>
-                                {getWorkingHoursDisplay(record)}
-                                </td>
-            
-                                <td className='px-6 py-4'>
-                                {dayType.label !== "-" ? <span className={`badge ${dayType.className}`}>{dayType.label}</span> : "-"}
+                                <td className='max-w-xs text-slate-600 truncate' title={leave.reason}>
+                                    {leave.reason}
                                 </td>
             
                                 <td className='px-6 py-4'>
-                                <span className={`badge ${record.status === "PRESENT" ? "badge-success" : record.status === "LATE" ? "badge-warning" : "badge-danger"}`}>
-                                    {record.status}
-                                </span>
+                                    <span className={`badge ${leave.status === "APPROVED" ? "badge-success" : leave.status === "REJECTED" ? "badge-danger" : "badge-warning"}`}>
+                                        {leave.status}
+                                    </span>
                                 </td>
+            
+                                {isAdmin && (
+                                    <td>
+                                        {leave.status === "PENDING" && (
+                                            <div className='flex justify-center gap-2'>
+                                                <button
+                                                    disabled={!!processing}
+                                                    onClick={() => handleStatusUpdate(leave._id || leave.id, "APPROVED")}
+                                                    className='p-1.5 rounded-md bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors'
+                                                >
+                                                    {
+                                                        processing === (leave._id || leave.id) 
+                                                        ? <Loader2 className='w-4 h-4 animate-spin' /> 
+                                                        : <Check className='w-4 h-4' />
+                                                    }
+                                                </button>
+
+                                                <button
+                                                    onClick={() => handleStatusUpdate(leave._id || leave.id, "REJECTED")}
+                                                    disabled={!!processing}
+                                                    className='p-1.5 rounded-md bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors'>
+                                                        {
+                                                            processing === (leave._id || leave.id)
+                                                                ? <Loader2 className='w-4 h-4 animate-spin' />
+                                                                : <X className='w-4 h-4' />
+                                                        }
+                                                </button>
+                                            </div>
+                                        )}
+                                    </td>
+                                )}
                             </tr>
                             )
                         })
