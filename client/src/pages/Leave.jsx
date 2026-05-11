@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from "react"
 import { dummyLeaveData } from "../assets/assets.jsx";
 import Loading from "../components/Loading.jsx";
 import { PalmtreeIcon, PlusIcon, ThermometerIcon, UmbrellaIcon } from 'lucide-react'
+import LeaveHistory from "../components/leave/LeaveHistory.jsx";
+import ApplyLeaveModal from "../components/leave/ApplyLeaveModal.jsx";
 
 const Leave = () => {
     const [leaves, setLeaves] = useState([]);
@@ -38,8 +40,8 @@ const Leave = () => {
         <div className="animate-fade-in">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                 <div>
-                    <h1>Leave Management</h1>
-                    <p>{isAdmin ? "Manage leave applications" : "Your leaves history and requests"}</p>
+                    <h1 className="page-title">Leave Management</h1>
+                    <p className="page-subtitle">{isAdmin ? "Manage leave applications" : "Your leaves history and requests"}</p>
                 </div>
 
                 {!isAdmin && !isDeleted && (
@@ -70,6 +72,18 @@ const Leave = () => {
                     ))}
                 </div>
             )}
+
+            <LeaveHistory 
+                leaves={leaves} 
+                isAdmin={isAdmin} 
+                onUpdate={fetchLeaves} 
+            />
+
+            <ApplyLeaveModal 
+                open={showModal} 
+                onClose={()=> setShowModal(false)}
+                onSuccess={fetchLeaves}
+            />
         </div>
     )
 }
