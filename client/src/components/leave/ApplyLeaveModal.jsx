@@ -1,4 +1,4 @@
-import { CalendarDays, FileText, X } from 'lucide-react';
+import { CalendarDays, FileText, Loader2, Send, X } from 'lucide-react';
 import React, { useState } from 'react'
 
 const ApplyLeaveModal = ({open, onClose, onSuccess}) => {
@@ -54,10 +54,40 @@ const ApplyLeaveModal = ({open, onClose, onSuccess}) => {
 
                         <div className='grid grid-cols-2 gap-4'>
                             <div>
-                                <span className='block text-xs text-slate-400 mb-1'></span>
+                                <span className='block text-xs text-slate-400 mb-1'>From</span>
                                 <input type="date" name='startDate' required min={minDate} />
                             </div>
+                            <div>
+                                <span className='block text-xs text-slate-400 mb-1'>To</span>
+                                <input type="date" name='endDate' required min={minDate} />
+                            </div>
                         </div>
+                    </div>
+
+                    {/* reason */}
+                    <div>
+                        <label className='text-sm font-medium block mb-2 text-slate-700'>
+                            Reason
+                        </label>
+
+                        <textarea 
+                            name="reason" 
+                            required 
+                            rows={3} 
+                            className='resize-none' 
+                            placeholder='Briefly decsribe why you need this leave...' 
+                        />
+                    </div>
+
+                    {/* buttons */}
+                    <div className='flex gap-3 pt-2'>
+                        <button onClick={onClose} className='btn-secondary flex-1' type='button'>
+                            Cancel
+                        </button>
+                        <button onClick={onClose} disabled className='btn-primary flex-1 flex items-center justify-center gap-2' type='submit'>
+                            {loading ? <Loader2 className='w-4 h-4 animate-spin' /> : <Send className='w-4 h-4' /> }
+                            {loading ? "Submitting..." : "Submit"}
+                        </button>
                     </div>
                 </form>
             </div>
