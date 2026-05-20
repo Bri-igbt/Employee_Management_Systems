@@ -3,6 +3,11 @@ import cors from 'cors';
 import "dotenv/config";
 import multer from 'multer';
 import connectDB from './config/db.js';
+import authRoutes from './routes/authRoutes.js';
+import employeeRoutes from './routes/employeeRoutes.js';
+import profileRoutes from './routes/profileRoutes.js';
+import attendanceRoutes from './routes/attendanceRoutes.js';
+
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -14,5 +19,12 @@ app.use(multer().none());
 
 // Routes
 app.get("/", (req, res) => res.send("Server is running"))
+app.use("/api/auth", authRoutes);
+app.use("/api/employee", employeeRoutes);
+app.use("/api/profile", profileRoutes);
+app.use("/api/attendance", attendanceRoutes);
+
+
+
 await connectDB();
 app.listen(PORT, ()=> console.log(`Server running on port ${PORT}`))

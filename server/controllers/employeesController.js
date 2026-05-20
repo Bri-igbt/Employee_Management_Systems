@@ -1,7 +1,6 @@
 import Employee from "../models/Employee.js";
 import bcrypt from 'bcrypt'
 import User from "../models/User.js";
-import { error } from "three";
 
 // Get Employees
 export const getEmployees = async (req, res) => {

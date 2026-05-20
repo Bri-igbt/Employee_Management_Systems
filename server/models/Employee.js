@@ -12,7 +12,7 @@ const employeeSchema = new mongoose.Schema({
     allowances: { type: Number, default: 0 },
     deductions: { type: Number, default: 0 },
     employmentStatus: { type: String, enum: ["ACTIVE", "INACTIVE"], default: "ACTIVE"},
-    joinDate: { type: Data, required: true},
+    joinDate: { type: Date, required: true},
     isDeleted: { type: Boolean, default: false},
     bio: { type: String, default: ""},
     department: { type: String, enum: DEPARTMENTS}
