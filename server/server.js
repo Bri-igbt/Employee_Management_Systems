@@ -7,6 +7,8 @@ import authRoutes from './routes/authRoutes.js';
 import employeeRoutes from './routes/employeeRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import attendanceRoutes from './routes/attendanceRoutes.js';
+import leaveRoutes from './routes/leavesRoutes.js';
+import payslipRoutes from './routes/payslipsRoutes.js';
 
 
 const app = express();
@@ -23,6 +25,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/employee", employeeRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/attendance", attendanceRoutes);
+app.use("/api/leave", leaveRoutes);
+app.use("/api/payslips", payslipRoutes);
 
 
 
