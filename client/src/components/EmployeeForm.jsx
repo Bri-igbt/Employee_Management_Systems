@@ -12,29 +12,43 @@ const EmployeeForm = ({initialData, onSuccess, onCancel}) => {
     const isEditMode = !!initialData;
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        setLoading(true)
+        e.preventDefault();
+        setLoading(true);
 
-        const formData = new FormData(e.currentTarget);
-        if(isEditMode) {
-            const pwd = formData.get("password")
-            if(!pwd) formData.delete("password")
+        const form = Object.fromEntries(
+            new FormData(e.currentTarget)
+        );
+
+        if (isEditMode && !form.password) {
+            delete form.password;
         }
 
         try {
-            const url = isEditMode ? `/employees/${initialData.id}` : "/employees"
-            const method = isEditMode ? "put" : "post";
-            await api[method](url, formData)
-            onSuccess ? onSuccess() : navigate('/employees')
+            const url = isEditMode
+                ? `/employees/${initialData.id}`
+                : "/employees";
+
+            const method = isEditMode
+                ? "put"
+                : "post";
+
+            await api[method](url, form);
+
+            onSuccess
+                ? onSuccess()
+                : navigate("/employees");
 
         } catch (error) {
+            console.log(error.response);
+
             toast.error(
-                error.response?.data?.error || error.message
+                error.response?.data?.error ||
+                error.message
             );
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
 
     return (
