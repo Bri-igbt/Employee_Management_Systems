@@ -1,6 +1,5 @@
 import { useCallback, useEffect } from "react";
 import { useState } from "react"
-import { dummyAttendanceData } from "../assets/assets.jsx";
 import Loading from "../components/Loading.jsx";
 import CheckInButton from "../components/attendance/CheckInButton.jsx";
 import AttendanceStats from "../components/attendance/AttendanceStats.jsx";

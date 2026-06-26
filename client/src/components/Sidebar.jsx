@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { dummyProfileData } from '../assets/assets.jsx';
 import { LayoutGridIcon, MenuIcon, UserIcon, XIcon, CalendarIcon, FileTextIcon, DollarSignIcon, SettingsIcon, ChevronRightIcon, LogOutIcon, Loader2Icon } from 'lucide-react'
-import { useAuth } from '../context/authContext.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 import api from '../api/axios.js';
 
 const Sidebar = () => {

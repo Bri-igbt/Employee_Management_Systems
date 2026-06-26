@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { dummyAdminDashboardData, dummyEmployeeDashboardData } from '../assets/assets.jsx';
 import Loading from '../components/Loading.jsx';
 import EmployeeDashboard from '../components/EmployeeDashboard.jsx';
 import AdminDashboard from '../components/AdminDashboard.jsx';
