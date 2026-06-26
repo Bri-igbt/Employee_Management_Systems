@@ -22,17 +22,31 @@ const PORT = process.env.PORT || 8000;
 // Connect Database
 await connectDB();
 
-// Middleware
+// Allowed Frontends
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://emstack-delta.vercel.app",
+];
+
+// CORS Configuration
 app.use(
     cors({
-        origin: [
-            "http://localhost:5173",
-            "https://emstack-delta.vercel.app",
-        ],
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+            return callback(new Error("Not allowed by CORS"));
+        },
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
         credentials: true,
     })
 );
 
+// Handle preflight requests
+app.options("*", cors());
+
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(multer().none());
@@ -42,7 +56,7 @@ app.get("/", (req, res) => {
     res.status(200).send("Server is running");
 });
 
-// API Routes
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/profile", profileRoutes);
@@ -51,6 +65,7 @@ app.use("/api/leave", leaveRoutes);
 app.use("/api/payslips", payslipRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
+// Inngest
 app.use(
     "/api/inngest",
     serve({
@@ -59,6 +74,7 @@ app.use(
     })
 );
 
+// 404 Route
 app.use("*", (req, res) => {
     res.status(404).json({
         success: false,
@@ -66,6 +82,7 @@ app.use("*", (req, res) => {
     });
 });
 
+// Global Error Handler
 app.use((err, req, res, next) => {
     console.error(err);
 
@@ -75,6 +92,7 @@ app.use((err, req, res, next) => {
     });
 });
 
+// Start Server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
