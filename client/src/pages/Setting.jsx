@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { dummyProfileData } from '../assets/assets.jsx';
 import Loading from '../components/Loading.jsx';
 import { Lock } from 'lucide-react'
 import ProfileForm from '../components/ProfileForm.jsx';

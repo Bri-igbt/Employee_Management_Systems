@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom"
 import Sidebar from "../components/Sidebar.jsx"
-import { useAuth } from "../context/authContext.jsx"
+import { useAuth } from "../context/AuthContext.jsx"
 import Loading from "../components/Loading.jsx"
 
 const Layout = () => {

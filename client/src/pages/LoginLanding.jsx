@@ -1,7 +1,7 @@
 import { Link, Navigate } from "react-router-dom"
 import LoginLeftSide from "../components/LoginLeftSide.jsx"
 import { UserIcon, ShieldIcon, ArrowRightIcon } from 'lucide-react'
-import { useAuth } from "../context/authContext.jsx"
+import { useAuth } from "../context/AuthContext.jsx"
 import Loading from "../components/Loading.jsx"
 
 const LoginLanding = () => {
