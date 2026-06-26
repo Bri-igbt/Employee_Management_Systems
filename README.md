@@ -3,6 +3,10 @@
 
 A full‑stack Employee Management System built with React (Vite) on the client and Node.js/Express + MongoDB on the server. EMS enables organizations to manage employees, attendance, leaves, and payslips with role‑based access (Admin & Employee), JWT authentication, email notifications, and background workflows powered by Inngest.
 
+An Employee Management System (EMS) is a software application designed to help organizations efficiently manage employee information, daily operations, and human resource activities. It serves as a centralized platform where employee records, attendance, payroll, performance, and other workforce-related data can be stored, updated, and accessed securely.
+
+The primary goal of an Employee Management System is to improve organizational productivity by automating manual administrative tasks. Instead of maintaining paper files or spreadsheets, businesses can use an EMS to keep accurate and up-to-date employee information in a digital format. This reduces errors, saves time, and enhances data security.
+
 
 ## Key Features
 
