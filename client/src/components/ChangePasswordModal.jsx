@@ -1,5 +1,6 @@
 import { Loader2Icon, LockIcon, X } from 'lucide-react';
 import React, { useState } from 'react'
+import api from '../api/axios.js';
 
 const ChangePasswordModal = ({ open, onClose}) => {
     const [loading, setLoading] = useState(false);
@@ -7,6 +8,39 @@ const ChangePasswordModal = ({ open, onClose}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setMessage({ type: "", text: ""});
+        const formData = new FormData(e.currentTarget);
+        const currentPassword = formData.get("currentPassword");
+        const newPassword = formData.get("newPassword");
+
+        try {
+            const res = await api.post('/auth/change-password', {
+                currentPassword,
+                newPassword,
+            });
+
+            if (!res.data.success) {
+                throw new Error(res.data.error || "Failed");
+            }
+
+            setMessage({
+                type: "success",
+                text: "Password updated successfully",
+            });
+
+            e.target.reset();
+
+        } catch (error) {
+            setMessage({
+                type: "error",
+                text:
+                    error?.response?.data?.error ||
+                    error.message ||
+                    "Failed to update password",
+            });
+        }
+
     }
 
     if(!open) return null;

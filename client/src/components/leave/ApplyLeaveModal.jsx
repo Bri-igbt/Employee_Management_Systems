@@ -1,7 +1,9 @@
 import { CalendarDays, FileText, Loader2, Send, X } from 'lucide-react';
 import React, { useState } from 'react'
+import api from '../../api/axios.js';
+import toast from 'react-hot-toast';
 
-const ApplyLeaveModal = ({open, onClose, onSuccess}) => {
+const ApplyLeaveModal = ({ open, onClose, onSuccess }) => {
     const [loading, setLoading] = useState(false);
 
     const today = new Date();
@@ -11,13 +13,26 @@ const ApplyLeaveModal = ({open, onClose, onSuccess}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setLoading(true)
+        const formData = new FormData(e.currentTarget)
+        const data = Object.fromEntries(formData.entries())
+
+        try {
+            await api.post('/leave', data)
+            onSuccess();
+            onClose();
+        } catch (error) {
+            toast.error(error?.response?.data?.error || error.message)
+        } finally {
+            setLoading(false)
+        }
     }
 
-    if(!open) return null;
+    if (!open) return null;
 
     return (
         <div className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm' onClose={onClose}>
-            <div className='relative bg-white rounded-2xl shadow-2xl w-full max-w-lg animate-fade-in' onClick={(e)=> e.stopPropagation()}>
+            <div className='relative bg-white rounded-2xl shadow-2xl w-full max-w-lg animate-fade-in' onClick={(e) => e.stopPropagation()}>
                 {/* header */}
                 <div className='flex items-center justify-between p-6 pb-0'>
                     <div>
@@ -35,7 +50,7 @@ const ApplyLeaveModal = ({open, onClose, onSuccess}) => {
                     {/* leave type */}
                     <div>
                         <label className='flex items-center gap-2 text-sm font-medium text-slate-700 mb-2'>
-                            <FileText className='w-4 h-4 text-slate-400'/>
+                            <FileText className='w-4 h-4 text-slate-400' />
                             Leave Type
                         </label>
                         <select name="type" required>
@@ -70,12 +85,12 @@ const ApplyLeaveModal = ({open, onClose, onSuccess}) => {
                             Reason
                         </label>
 
-                        <textarea 
-                            name="reason" 
-                            required 
-                            rows={3} 
-                            className='resize-none' 
-                            placeholder='Briefly decsribe why you need this leave...' 
+                        <textarea
+                            name="reason"
+                            required
+                            rows={3}
+                            className='resize-none'
+                            placeholder='Briefly describe why you need this leave...'
                         />
                     </div>
 
@@ -84,8 +99,8 @@ const ApplyLeaveModal = ({open, onClose, onSuccess}) => {
                         <button onClick={onClose} className='btn-secondary flex-1' type='button'>
                             Cancel
                         </button>
-                        <button onClick={onClose} disabled className='btn-primary flex-1 flex items-center justify-center gap-2' type='submit'>
-                            {loading ? <Loader2 className='w-4 h-4 animate-spin' /> : <Send className='w-4 h-4' /> }
+                        <button disabled={loading} className='btn-primary flex-1 flex items-center justify-center gap-2' type='submit'>
+                            {loading ? <Loader2 className='w-4 h-4 animate-spin' /> : <Send className='w-4 h-4' />}
                             {loading ? "Submitting..." : "Submit"}
                         </button>
                     </div>

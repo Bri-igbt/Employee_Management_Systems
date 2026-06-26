@@ -58,23 +58,71 @@ export const session = async (req, res) => {
 export const changePassword = async (req, res) => {
     try {
         const session = req.session;
-        const {currentPassword, newPassword} = req.body;
+        const { currentPassword, newPassword } = req.body;
 
-        if(!currentPassword || !newPassword) {
-            return res.status(400).json({ error: "Both passwords are required"});
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({
+                success: false,
+                error: "Both passwords are required",
+            });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({
+                success: false,
+                error: "New password must be at least 6 characters long",
+            });
         }
 
         const user = await User.findById(session.userId);
-        if(!user) return res.status(404).json({ error: "User not found"});
-        const isValid = await bcrypt.compare(currentPassword, user.password);
-        if(!isValid) return res.status(400).json({ error: "Current password is incorrect"});
-        
-        const hashed = await bcrypt.hash(newPassword, 10);
-        await User.findByIdAndUpdate(session.userId, {password: hashed})
 
-        return res.json({ secuess: true })
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                error: "User not found",
+            });
+        }
+
+        const isValid = await bcrypt.compare(
+            currentPassword,
+            user.password
+        );
+
+        if (!isValid) {
+            return res.status(400).json({
+                success: false,
+                error: "Current password is incorrect",
+            });
+        }
+
+        const samePassword = await bcrypt.compare(
+            newPassword,
+            user.password
+        );
+
+        if (samePassword) {
+            return res.status(400).json({
+                success: false,
+                error: "New password must be different from the current password",
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Password updated successfully",
+        });
 
     } catch (error) {
-        return res.status(500).json({ error: "Failed to change"})
+        console.error("Change password error:", error);
+
+        return res.status(500).json({
+            success: false,
+            error: "Failed to change password",
+        });
     }
-}
+};

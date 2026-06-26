@@ -2,6 +2,7 @@ import { DEPARTMENTS } from "../constants/departments.js";
 import Attendance from "../models/Attendance.js";
 import Employee from "../models/Employee.js";
 import LeaveApplication from "../models/LeaveApplication.js";
+import Payslip from "../models/Payslip.js";
 
 
 // Get dashboard for employee and admin 
@@ -9,16 +10,16 @@ import LeaveApplication from "../models/LeaveApplication.js";
 export const getDashboard = async (req, res) => {
     try {
         const session = req.session;
-        if(session.role === "ADMIN") {
+        if (session.role === "ADMIN") {
             const [totalEmployees, todayAttendance, pendingLeaves] = await Promise.all([
-                Employee.countDocuments({ isDeleted: { $ne: true }}),
-                Attendance.countDocuments({ 
+                Employee.countDocuments({ isDeleted: { $ne: true } }),
+                Attendance.countDocuments({
                     date: {
-                        $gte: new Date(new Date().setHours(0,0,0,0)),
-                        $lt: new Date(new Date().setHours(24,0,0,0)),
+                        $gte: new Date(new Date().setHours(0, 0, 0, 0)),
+                        $lt: new Date(new Date().setHours(24, 0, 0, 0)),
                     }
                 }),
-                LeaveApplication.countDocuments({ status: "PENDING"})
+                LeaveApplication.countDocuments({ status: "PENDING" })
             ])
 
             return res.json({
@@ -32,17 +33,17 @@ export const getDashboard = async (req, res) => {
             const employee = await Employee.findOne({
                 userId: session.userId,
             }).lean();
-            if(!employee) return res.status(404).json({ error: "Employee not found"});
+            if (!employee) return res.status(404).json({ error: "Employee not found" });
 
             const today = new Date();
-            const [] = await Promise.all([
+            const [currentMonthAttendance, pendingLeaves, latestPayslip] = await Promise.all([
                 Attendance.countDocuments({
                     employeeId: employee._id,
                     date: {
                         $gte: new Date(today.getFullYear(), today.getMonth(), 1),
                         $lt: new Date(today.getFullYear(), today.getMonth() + 1, 1),
                     }
-                }).
+                }),
                 LeaveApplication.countDocuments({
                     employeeId: employee._id,
                     status: "PENDING",
@@ -52,10 +53,10 @@ export const getDashboard = async (req, res) => {
 
             return res.json({
                 role: "EMPLOYEE",
-                employee: {...employee, id: employee._id.toString()},
+                employee: { ...employee, id: employee._id.toString() },
                 currentMonthAttendance,
                 pendingLeaves,
-                latestPayslip: lastestPayslip ? {...latestPayslip, id: latestPayslip._id.toString()} : null
+                latestPayslip: latestPayslip ? { ...latestPayslip, id: latestPayslip._id.toString() } : null
             })
         }
 
